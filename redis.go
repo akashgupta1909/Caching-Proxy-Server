@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -13,15 +15,31 @@ type RedisConfig struct {
 }
 
 func initRedisClient() (RedisConfig, error) {
+
+	redisAddress := os.Getenv("REDIS_ADDRESS")
+	if redisAddress == "" {
+		return RedisConfig{}, fmt.Errorf("REDIS_ADDRESS environment variable is not set")
+	}
+	redisPassword := os.Getenv("REDIS_PASSWORD")
+	redisDB := os.Getenv("REDIS_DB")
+	if redisDB == "" {
+		return RedisConfig{}, fmt.Errorf("REDIS_DB environment variable is not set")
+	}
+
+	db, err := strconv.Atoi(redisDB)
+	if err != nil {
+		return RedisConfig{}, fmt.Errorf("error converting REDIS_DB to int: %v", err)
+	}
+
 	redisClient := RedisConfig{
 		Client: redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
-			Password: "",
-			DB:       0,
+			Addr:     redisAddress,
+			Password: redisPassword,
+			DB:       db,
 		}),
 	}
 
-	_, err := redisClient.Client.Ping(context.Background()).Result()
+	_, err = redisClient.Client.Ping(context.Background()).Result()
 	if err != nil {
 		return RedisConfig{}, fmt.Errorf("error connecting to Redis: %v", err)
 	}

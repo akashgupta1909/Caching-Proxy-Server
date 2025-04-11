@@ -3,9 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load()
+
 	config, err := initCommand()
 	if err != nil {
 		fmt.Println(err)
