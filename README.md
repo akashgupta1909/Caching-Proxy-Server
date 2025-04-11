@@ -1,6 +1,6 @@
 # ⚡ Caching Proxy Server
 
-A lightweight and configurable HTTP proxy server with caching functionality powered by Redis. Built using Go and the `chi` router, this proxy caches responses to reduce repeated requests to the origin server and speed up response times.
+A lightweight and configurable HTTP proxy server with caching functionality powered by Redis. Built using Go and the redis, this proxy caches responses to reduce repeated requests to the origin server and speed up response times.
 
 ---
 
